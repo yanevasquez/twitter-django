@@ -1,0 +1,67 @@
+{% extends 'index.html' %} {% load humanize %} {% block conteudo %}
+
+<div class="card">
+    <div class="card-body">
+        <strong class="d-block">
+                {{ tweet.autor.usuario.get_full_name }}
+            </strong>
+        <small class="d-block text-muted">
+                @{{ tweet.autor.usuario.username }}
+            </small>
+        <h5 class="my-2">
+            {{ tweet.conteudo }}
+        </h5>
+        <small class="d-block text-muted">
+                {{ tweet.publicado_em }}
+            </small>
+    </div>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <small>
+                    <strong>{{ tweet.likes.count }}</strong>
+                    <span class="text-muted">
+                        Curtida{{ tweet.likes.count|pluralize }}
+                    </span>
+                </small>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <a class="col" href="{% url 'like' tweet.id %}?next={% url 'tweet_detail' tweet.id %}">
+                    <span class="far fa-heart"></span>
+                </a>
+                <a class="col" href="#">
+                    <span class="far fa-comment"></span>
+                </a>
+            </div>
+        </li>
+
+        {% for comentario in tweet.comentarios.all %}
+        <li class="list-group-item">
+            <small>
+                        <strong>
+                            {{ comentario.autor.usuario.get_full_name }}
+                        </strong>
+                        <span class="text-muted">
+                            @{{ comentario.autor.usuario.username }} .
+                            {{ comentario.publicado_em|naturaltime }}
+                        </span>
+                        <span class="d-block">
+                            {{ comentario.conteudo }}
+                        </span>
+                        <div class="row pt-2">
+                            <a class="col" href="#">
+                                <span class="far fa-heart"></span>
+                            </a>
+                            <a class="col" href="#">
+                                <span class="far fa-comment"></span>
+                            </a>
+                        </div>
+                    </small>
+        </li>
+        {% endfor %}
+
+    </ul>
+</div>
+
+{% endblock %}
